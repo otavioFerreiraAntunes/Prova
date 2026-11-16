@@ -164,8 +164,7 @@ app.post('/responsaveis/novo', verificarAutenticacao, asyncRoute(async (req, res
     }
 
     // RN02: CPF gravado também como hash bcrypt (LGPD)
-    const cpfSomenteDigitos = dados.cpf.replace(/\D/g, '');
-    const cpfHash = await bcrypt.hash(cpfSomenteDigitos, 10);
+    const cpfHash = await hashCpf(dados.cpf);
 
     await pool.query(
         `INSERT INTO responsaveis (nome, cpf, cpf_hash, telefone, email)
@@ -214,8 +213,7 @@ app.post('/responsaveis/editar/:id', verificarAutenticacao, asyncRoute(async (re
     }
 
     // RN02: Atualiza o hash do CPF junto com o CPF legível
-    const cpfSomenteDigitos = dados.cpf.replace(/\D/g, '');
-    const cpfHash = await bcrypt.hash(cpfSomenteDigitos, 10);
+    const cpfHash = await hashCpf(dados.cpf);
 
     const resultado = await pool.query(
         `UPDATE responsaveis SET nome = $1, cpf = $2, cpf_hash = $3,
