@@ -1,0 +1,76 @@
+-- Script SQL da Clínica Pediátrica Pequenos Passos: cria tabelas, insere dados de teste e verifica registros.
+
+DROP TABLE IF EXISTS agendamentos CASCADE;
+DROP TABLE IF EXISTS criancas     CASCADE;
+DROP TABLE IF EXISTS responsaveis CASCADE;
+DROP TABLE IF EXISTS usuarios     CASCADE;
+
+CREATE TABLE usuarios (
+    id       SERIAL       PRIMARY KEY,
+    nome     VARCHAR(100) NOT NULL,
+    cpf_hash VARCHAR(255) NOT NULL,
+    senha    VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE responsaveis (
+    id        SERIAL       PRIMARY KEY,
+    nome      VARCHAR(150) NOT NULL,
+    cpf       VARCHAR(14)  NOT NULL UNIQUE,
+    cpf_hash  VARCHAR(255) NOT NULL,
+    telefone  VARCHAR(20)  NOT NULL,
+    email     VARCHAR(150)
+);
+
+CREATE TABLE criancas (
+    id              SERIAL       PRIMARY KEY,
+    nome            VARCHAR(150) NOT NULL,
+    data_nascimento DATE         NOT NULL,
+    responsavel_id  INTEGER      NOT NULL REFERENCES responsaveis(id) ON DELETE RESTRICT
+);
+
+CREATE TABLE agendamentos (
+    id              SERIAL      PRIMARY KEY,
+    crianca_id      INTEGER     NOT NULL REFERENCES criancas(id) ON DELETE CASCADE,
+    cpf_hash        VARCHAR(255) NOT NULL,
+    data_consulta   DATE        NOT NULL,
+    hora_consulta   TIME,
+    status_consulta VARCHAR(50) NOT NULL DEFAULT 'Agendada',
+    medico          VARCHAR(120),
+    observacoes     TEXT
+);
+
+INSERT INTO usuarios (nome, cpf_hash, senha) VALUES
+('Recepção Principal', '$2b$10$bUoEaVp3XO5a6e1xnW6XR.SngplMW3Jn8uwjbizAqgFaKUNs7ZVjC', '$2b$10$TXmCbrUTU71Jmx8sHAZWG.C3wpoKQp2cI1QnuV1W3/MJl/VeagJ/2');
+
+INSERT INTO responsaveis (nome, cpf, cpf_hash, telefone, email) VALUES
+('Ana Paula Souza', '119.876.544-33', '$2b$10$rQTnQeBOfMgUl7yZT.f6c.m8S81wylIMialkWxZDp52xBFZFxfZ8O', '(11) 98765-4433', 'ana.souza@email.com');
+
+INSERT INTO criancas (nome, data_nascimento, responsavel_id) VALUES
+('Lucas Souza Lima', '2021-05-12', 1);
+
+INSERT INTO agendamentos (crianca_id, cpf_hash, data_consulta, hora_consulta, status_consulta, medico, observacoes) VALUES
+(1, '$2b$10$rQTnQeBOfMgUl7yZT.f6c.m8S81wylIMialkWxZDp52xBFZFxfZ8O', '2026-11-20', '09:30', 'Agendada', 'Dr. Paulo Henrique', 'Consulta de rotina');
+
+SELECT 'usuarios'     AS tabela, COUNT(*) AS registros FROM usuarios
+UNION ALL
+SELECT 'responsaveis' AS tabela, COUNT(*) AS registros FROM responsaveis
+UNION ALL
+SELECT 'criancas'     AS tabela, COUNT(*) AS registros FROM criancas
+UNION ALL
+SELECT 'agendamentos' AS tabela, COUNT(*) AS registros FROM agendamentos;
+
+-- Migração de banco existente: execute somente este bloco no PostgreSQL.
+-- Não execute o script completo para atualizar um banco existente, pois ele apaga as tabelas no início.
+-- Para migrar o CPF de login legado, execute `npm run migrate:cpf` na pasta do projeto.
+ALTER TABLE agendamentos
+    ADD COLUMN IF NOT EXISTS cpf_hash VARCHAR(255);
+
+UPDATE agendamentos a
+SET cpf_hash = r.cpf_hash
+FROM criancas c
+JOIN responsaveis r ON r.id = c.responsavel_id
+WHERE a.crianca_id = c.id
+  AND a.cpf_hash IS NULL;
+
+ALTER TABLE agendamentos
+    ALTER COLUMN cpf_hash SET NOT NULL;

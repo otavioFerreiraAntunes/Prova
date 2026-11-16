@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crianças — Pequenos Passos</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #000000;
+      color: #ffffff;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    header {
+      background-color: #070d18;
+      border-bottom: 1px solid #14233c;
+      padding: 16px 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background-color: #0f1e36;
+      border: 1px solid #1e3a5f;
+      color: #ffffff;
+    }
+
+    header h1 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #ffffff;
+      letter-spacing: -0.01em;
+    }
+
+    .usuario {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 0.9rem;
+      color: #94a3b8;
+    }
+
+    .usuario strong {
+      color: #ffffff;
+    }
+
+    nav {
+      background-color: #0a1322;
+      border-bottom: 1px solid #14233c;
+      padding: 10px 36px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #94a3b8;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+    }
+
+    nav a:hover {
+      background-color: #0f1e36;
+      color: #ffffff;
+    }
+
+    nav a.ativo {
+      background-color: #0f1e36;
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    main {
+      max-width: 1140px;
+      margin: 32px auto;
+      padding: 0 24px;
+    }
+
+    .card {
+      background-color: #070d18;
+      border: 1px solid #14233c;
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      color: #ffffff;
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sub-info {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid #1e3a5f;
+      cursor: pointer;
+      text-decoration: none;
+      padding: 9px 18px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #ffffff;
+      background-color: #0f1e36;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #172d4f;
+      border-color: #ffffff;
+    }
+
+    .btn-novo {
+      background-color: #0f1e36;
+      border-color: #ffffff;
+    }
+
+    .btn-novo:hover {
+      background-color: #ffffff;
+      color: #000000;
+    }
+
+    .btn-editar {
+      background-color: #000000;
+      border-color: #1e3a5f;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+    }
+
+    .btn-editar:hover {
+      background-color: #0f1e36;
+      border-color: #ffffff;
+    }
+
+    .btn-excluir {
+      background-color: #000000;
+      color: #ffffff;
+      border: 1px solid #334155;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+    }
+
+    .btn-excluir:hover {
+      background-color: #172d4f;
+      border-color: #ffffff;
+    }
+
+    .btn-sair {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      background-color: #070d18;
+      color: #94a3b8;
+      border: 1px solid #1e3a5f;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-sair:hover {
+      background-color: #0f1e36;
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .alerta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      background-color: #0f1e36;
+      color: #ffffff;
+      border: 1px solid #ffffff;
+    }
+
+    .alerta.erro {
+      background-color: #3b1117;
+      border-color: #b5444f;
+      color: #ffd7da;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background-color: #0a1322;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 13px 16px;
+      border-bottom: 1px solid #14233c;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #14233c;
+      font-size: 0.88rem;
+      color: #ffffff;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background-color: #0a1322;
+    }
+
+    td.acoes {
+      white-space: nowrap;
+    }
+
+    td.acoes form {
+      display: inline-block;
+      margin-left: 4px;
+    }
+
+    .vazio {
+      text-align: center;
+      color: #94a3b8;
+      padding: 30px;
+      font-size: 0.92rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo-area">
+      <div class="logo-badge">
+        <i data-lucide="stethoscope" width="20" height="20"></i>
+      </div>
+      <h1>Clínica Pequenos Passos</h1>
+    </div>
+    <div class="usuario">
+      <span><i data-lucide="user" width="16" height="16" style="vertical-align: middle;"></i>
+        <%= usuario.nome %>
+      </span>
+      <a class="btn-sair" href="/logout">
+        <i data-lucide="log-out" width="14" height="14"></i> Sair
+      </a>
+    </div>
+  </header>
+
+  <nav>
+    <a href="/dashboard">
+      <i data-lucide="layout-dashboard" width="16" height="16"></i> Início
+    </a>
+    <a href="/responsaveis">
+      <i data-lucide="users" width="16" height="16"></i> Responsáveis
+    </a>
+    <a href="/criancas" class="ativo">
+      <i data-lucide="baby" width="16" height="16"></i> Crianças
+    </a>
+    <a href="/agendamentos">
+      <i data-lucide="calendar" width="16" height="16"></i> Agendamentos
+    </a>
+  </nav>
+
+  <main>
+    <div class="card">
+      <div class="topo">
+        <div>
+          <h2><i data-lucide="baby" width="22" height="22"></i> Crianças (Pacientes)</h2>
+          <p class="sub-info">Relação de pacientes infantis cadastrados</p>
+        </div>
+        <a class="btn btn-novo" href="/criancas/nova">
+          <i data-lucide="plus" width="16" height="16"></i> Nova Criança
+        </a>
+      </div>
+
+      <% if (typeof mensagem !=='undefined' && mensagem) { %>
+        <div class="alerta <%= mensagem.tipo %>" role="alert">
+          <i data-lucide="info" width="16" height="16"></i>
+          <%= mensagem.texto %>
+        </div>
+        <% } %>
+
+          <div class="table-responsive">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nome da Criança</th>
+                  <th>Data de Nascimento</th>
+                  <th>Responsável Vinculado</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if (criancas.length===0) { %>
+                  <tr>
+                    <td colspan="5" class="vazio">Nenhuma criança cadastrada até o momento.</td>
+                  </tr>
+                  <% } %>
+                    <% criancas.forEach(function(c) { %>
+                      <tr>
+                        <td>#<%= c.id %>
+                        </td>
+                        <td><strong>
+                            <%= c.nome %>
+                          </strong></td>
+                        <td>
+                          <%= new Date(c.data_nascimento).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) %>
+                        </td>
+                        <td>
+                          <span style="display:inline-flex; align-items:center; gap:6px;">
+                            <i data-lucide="user" width="14" height="14" style="color:#94a3b8;"></i>
+                            <%= c.nome_responsavel %>
+                          </span>
+                        </td>
+                        <td class="acoes">
+                          <a class="btn btn-editar" href="/criancas/editar/<%= c.id %>">
+                            <i data-lucide="pencil" width="12" height="12"></i> Editar
+                          </a>
+                          <form action="/criancas/deletar/<%= c.id %>" method="POST"
+                            onsubmit="return confirm('Deseja realmente excluir esta criança?')">
+                            <button type="submit" class="btn btn-excluir">
+                              <i data-lucide="trash-2" width="12" height="12"></i> Excluir
+                            </button>
+                          </form>
+                        </td>
+                      </tr>
+                      <% }); %>
+              </tbody>
+            </table>
+          </div>
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+
+</html>

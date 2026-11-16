@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Novo Cliente - Pequenos Passos</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #f2f9fb; color: #35505c; min-height: 100vh; }
+    header { background: linear-gradient(90deg, #7ccbd9, #a8dce6); color: #fff; padding: 14px 32px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    header h1 { font-size: 1.3rem; }
+    .usuario { display: flex; align-items: center; gap: 14px; font-size: 0.95rem; }
+    nav { background: #fff; padding: 10px 32px; display: flex; gap: 8px; border-bottom: 3px solid #ffe3a3; }
+    nav a { text-decoration: none; color: #4a8696; padding: 8px 18px; border-radius: 20px; font-weight: 600; }
+    nav a:hover { background: #e3f4f8; }
+    nav a.ativo { background: #7ccbd9; color: #fff; }
+    main { max-width: 1000px; margin: 28px auto; padding: 0 20px; }
+    .card { background: #fff; border-radius: 14px; padding: 26px; box-shadow: 0 3px 12px rgba(100, 160, 175, 0.15); }
+    h2 { color: #3d7e8f; margin-bottom: 18px; }
+    .topo { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+    .btn { display: inline-block; border: none; cursor: pointer; text-decoration: none; padding: 9px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; color: #fff; background: #7ccbd9; }
+    .btn:hover { opacity: 0.88; }
+    .btn-novo { background: #6cc4a1; }
+    .btn-editar { background: #f5b95f; padding: 6px 14px; }
+    .btn-excluir { background: #ee8f9d; padding: 6px 14px; }
+    .btn-sair { background: rgba(255, 255, 255, 0.3); padding: 6px 14px; }
+    .btn-cinza { background: #b8c7cd; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #e3f4f8; color: #3d7e8f; text-align: left; padding: 12px; font-size: 0.9rem; }
+    td { padding: 12px; border-bottom: 1px solid #e8f0f2; font-size: 0.92rem; vertical-align: middle; }
+    tr:hover td { background: #fafdfe; }
+    td.acoes { white-space: nowrap; }
+    td.acoes form { display: inline; }
+    .vazio { text-align: center; color: #8aa2ab; padding: 30px; }
+    .alerta { padding: 12px 16px; border-radius: 8px; margin-bottom: 18px; font-weight: 600; }
+    .alerta.sucesso { background: #def5ea; color: #2f7d5b; border: 1px solid #b4e3cb; }
+    .alerta.erro { background: #fde5e8; color: #b5444f; border: 1px solid #f6c3c9; }
+    label { display: block; margin: 14px 0 6px; font-weight: 600; color: #4a8696; }
+    input[type=text], input[type=password], input[type=email], select, textarea { width: 100%; padding: 10px 12px; border: 1px solid #cfe2e8; border-radius: 8px; font-size: 0.95rem; font-family: inherit; background: #fbfeff; }
+    input:focus, select:focus, textarea:focus { outline: none; border-color: #7ccbd9; box-shadow: 0 0 0 3px #d6eff4; }
+    textarea { min-height: 100px; resize: vertical; }
+    .botoes-form { margin-top: 22px; display: flex; gap: 10px; }
+    .busca { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .busca input { flex: 1; min-width: 200px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1> Clínica Infantil Pequenos Passos</h1>
+    <div class="usuario">
+      <span>Olá, <strong><%= usuario.nome %></strong></span>
+      <a class="btn btn-sair" href="/logout">Sair</a>
+    </div>
+  </header>
+  <nav>
+    <a href="/clientes" class="ativo">Clientes</a>
+    <a href="/grupos">Grupos</a>
+  </nav>
+  <main>
+    <div class="card">
+      <h2>Novo Cliente</h2>
+      <% if (typeof mensagem !== 'undefined' && mensagem) { %>
+        <div class="alerta <%= mensagem.tipo %>"><%= mensagem.texto %></div>
+      <% } %>
+      <form action="/clientes/novo" method="POST">
+        <label for="nome_completo">Nome completo</label>
+        <input type="text" id="nome_completo" name="nome_completo" value="<%= dados.nome_completo || '' %>" required>
+
+        <label for="cpf">CPF</label>
+        <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" value="<%= dados.cpf || '' %>" required>
+
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" value="<%= dados.email || '' %>">
+
+        <label for="telefone">Telefone</label>
+        <input type="text" id="telefone" name="telefone" placeholder="(00) 00000-0000" value="<%= dados.telefone || '' %>">
+
+        <label for="grupo_id">Grupo de Atendimento</label>
+        <select id="grupo_id" name="grupo_id" required>
+          <option value="">Selecione um grupo</option>
+          <% grupos.forEach(function(g) { %>
+            <option value="<%= g.id %>" <%= String(dados.grupo_id) === String(g.id) ? 'selected' : '' %>><%= g.nome_grupo %></option>
+          <% }); %>
+        </select>
+
+        <div class="botoes-form">
+          <button type="submit" class="btn btn-novo">Cadastrar</button>
+          <a class="btn btn-cinza" href="/clientes">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </main>
+</body>
+</html>
